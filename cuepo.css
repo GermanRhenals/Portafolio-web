@@ -31,12 +31,17 @@ a :hover{
 #header{
     display: flex;
     justify-content: space-between;
+    padding: 2%;
+    margin: auto;
 }
 
 .parrafo{
     
     width: 50%;
     height: auto;
+    padding: 2%;
+    position: absolute;
+    top: 10%;
 
     
 }
@@ -63,6 +68,8 @@ a :hover{
     align-items: center;
     gap: 10px;
     flex-direction: column;
+    position: relative;
+    padding-top: 10%;
 }
 
 .trabajoactual{
@@ -100,6 +107,8 @@ a :hover{
 .imagen-personal{
 
     width: 50%;
+    margin-right: 3%;
+    padding-top: 3%;
 }
 
 .formulario{
@@ -159,6 +168,7 @@ button:hover{
     margin: 1%;
     padding: 1%;
     display: flex;
+    padding-top: 5%;
 }
 
 .slider{
@@ -186,4 +196,5 @@ margin: 5% ;
 }
 .experiencias{
     padding: 5%;
+    
 }
