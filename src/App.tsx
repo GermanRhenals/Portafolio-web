@@ -74,7 +74,7 @@ export default function App() {
           return
         }
 
-        currentVideo.currentTime += distance * 0.12
+        currentVideo.currentTime += distance * 0.35
         animationFrame.current = window.requestAnimationFrame(updateVideo)
       }
 
