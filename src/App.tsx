@@ -39,50 +39,38 @@ const actionLabels = ['Pitch us an idea', 'Come work here', 'Send a brief hello'
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showPills, setShowPills] = useState(false)
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const previousX = useRef<number | null>(null)
-  const targetTime = useRef(0)
+  const [frameIndex, setFrameIndex] = useState(0)
+  const targetFrame = useRef(0)
   const animationFrame = useRef<number | null>(null)
-  const sensitivity = 0.8
+  const frameCount = 51
 
   const handleMouseMove = useCallback((event: MouseEvent) => {
-    const video = videoRef.current
-    if (!video || Number.isNaN(video.duration)) return
-
-    if (previousX.current === null) {
-      previousX.current = event.clientX
-      return
-    }
-
-    const delta = event.clientX - previousX.current
-    previousX.current = event.clientX
-    const timeOffset = (delta / window.innerWidth) * sensitivity * video.duration
-    targetTime.current = Math.max(0, Math.min(video.duration, targetTime.current + timeOffset))
+    targetFrame.current = Math.round((event.clientX / window.innerWidth) * (frameCount - 1))
 
     if (animationFrame.current === null) {
-      const updateVideo = () => {
-        const currentVideo = videoRef.current
-        if (!currentVideo) {
-          animationFrame.current = null
-          return
-        }
+      const updateFrame = () => {
+        setFrameIndex((currentFrame) => {
+          const distance = targetFrame.current - currentFrame
+          if (Math.abs(distance) < 1) {
+            animationFrame.current = null
+            return targetFrame.current
+          }
 
-        const distance = targetTime.current - currentVideo.currentTime
-        if (Math.abs(distance) < 0.01) {
-          currentVideo.currentTime = targetTime.current
-          animationFrame.current = null
-          return
-        }
-
-        currentVideo.currentTime += distance * 0.35
-        animationFrame.current = window.requestAnimationFrame(updateVideo)
+          animationFrame.current = window.requestAnimationFrame(updateFrame)
+          return Math.round(currentFrame + distance * 0.35)
+        })
       }
 
-      animationFrame.current = window.requestAnimationFrame(updateVideo)
+      animationFrame.current = window.requestAnimationFrame(updateFrame)
     }
   }, [])
 
   useEffect(() => {
+    for (let index = 1; index <= frameCount; index += 1) {
+      const image = new Image()
+      image.src = `${import.meta.env.BASE_URL}frames/frame_${String(index).padStart(6, '0')}.webp`
+    }
+
     window.addEventListener('mousemove', handleMouseMove)
     const timer = window.setTimeout(() => setShowPills(true), 400)
     return () => {
@@ -103,13 +91,10 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen w-full bg-white text-black selection:bg-black/10">
-      <video
-        ref={videoRef}
+      <img
+        src={`${import.meta.env.BASE_URL}frames/frame_${String(frameIndex + 1).padStart(6, '0')}.webp`}
+        alt=""
         className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover object-[70%_center]"
-        src={`${import.meta.env.BASE_URL}videos/movement-a-all-boddy.webm`}
-        muted
-        playsInline
-        preload="auto"
       />
 
       <nav className="fixed left-0 top-0 z-[10] flex w-full items-center justify-between bg-transparent px-5 py-4 sm:px-8 sm:py-5">
