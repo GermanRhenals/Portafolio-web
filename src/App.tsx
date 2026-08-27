@@ -80,7 +80,7 @@ export default function App() {
       <video
         ref={videoRef}
         className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover object-[70%_center]"
-        src="/videos/movement-a-all-boddy.mp4"
+        src={`${import.meta.env.BASE_URL}videos/movement-a-all-boddy.mp4`}
         muted
         playsInline
         preload="auto"
