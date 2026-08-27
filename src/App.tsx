@@ -40,34 +40,25 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showPills, setShowPills] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const previousX = useRef(0)
+  const previousX = useRef<number | null>(null)
   const targetTime = useRef(0)
-  const isSeeking = useRef(false)
   const sensitivity = 0.8
 
   const handleMouseMove = useCallback((event: MouseEvent) => {
     const video = videoRef.current
     if (!video || Number.isNaN(video.duration)) return
 
+    if (previousX.current === null) {
+      previousX.current = event.clientX
+      return
+    }
+
     const delta = event.clientX - previousX.current
     previousX.current = event.clientX
     const timeOffset = (delta / window.innerWidth) * sensitivity * video.duration
     targetTime.current = Math.max(0, Math.min(video.duration, targetTime.current + timeOffset))
-
-    if (!isSeeking.current) {
-      video.currentTime = targetTime.current
-      isSeeking.current = true
-    }
+    video.currentTime = targetTime.current
   }, [])
-
-  const handleSeeked = () => {
-    isSeeking.current = false
-    const video = videoRef.current
-    if (video && Math.abs(video.currentTime - targetTime.current) > 0.1) {
-      video.currentTime = targetTime.current
-      isSeeking.current = true
-    }
-  }
 
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove)
@@ -88,7 +79,6 @@ export default function App() {
     <div className="relative min-h-screen w-full bg-white text-black selection:bg-black/10">
       <video
         ref={videoRef}
-        onSeeked={handleSeeked}
         className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover object-[70%_center]"
         src="/videos/movement-a-all-boddy.mp4"
         muted
