@@ -60,11 +60,25 @@ export default function App() {
     targetTime.current = Math.max(0, Math.min(video.duration, targetTime.current + timeOffset))
 
     if (animationFrame.current === null) {
-      animationFrame.current = window.requestAnimationFrame(() => {
+      const updateVideo = () => {
         const currentVideo = videoRef.current
-        if (currentVideo) currentVideo.currentTime = targetTime.current
-        animationFrame.current = null
-      })
+        if (!currentVideo) {
+          animationFrame.current = null
+          return
+        }
+
+        const distance = targetTime.current - currentVideo.currentTime
+        if (Math.abs(distance) < 0.01) {
+          currentVideo.currentTime = targetTime.current
+          animationFrame.current = null
+          return
+        }
+
+        currentVideo.currentTime += distance * 0.12
+        animationFrame.current = window.requestAnimationFrame(updateVideo)
+      }
+
+      animationFrame.current = window.requestAnimationFrame(updateVideo)
     }
   }, [])
 
@@ -73,7 +87,10 @@ export default function App() {
     const timer = window.setTimeout(() => setShowPills(true), 400)
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
-      if (animationFrame.current !== null) window.cancelAnimationFrame(animationFrame.current)
+      if (animationFrame.current !== null) {
+        window.cancelAnimationFrame(animationFrame.current)
+        animationFrame.current = null
+      }
       window.clearTimeout(timer)
     }
   }, [handleMouseMove])
