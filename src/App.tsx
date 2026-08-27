@@ -42,6 +42,7 @@ export default function App() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const previousX = useRef<number | null>(null)
   const targetTime = useRef(0)
+  const animationFrame = useRef<number | null>(null)
   const sensitivity = 0.8
 
   const handleMouseMove = useCallback((event: MouseEvent) => {
@@ -57,7 +58,14 @@ export default function App() {
     previousX.current = event.clientX
     const timeOffset = (delta / window.innerWidth) * sensitivity * video.duration
     targetTime.current = Math.max(0, Math.min(video.duration, targetTime.current + timeOffset))
-    video.currentTime = targetTime.current
+
+    if (animationFrame.current === null) {
+      animationFrame.current = window.requestAnimationFrame(() => {
+        const currentVideo = videoRef.current
+        if (currentVideo) currentVideo.currentTime = targetTime.current
+        animationFrame.current = null
+      })
+    }
   }, [])
 
   useEffect(() => {
@@ -65,6 +73,7 @@ export default function App() {
     const timer = window.setTimeout(() => setShowPills(true), 400)
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
+      if (animationFrame.current !== null) window.cancelAnimationFrame(animationFrame.current)
       window.clearTimeout(timer)
     }
   }, [handleMouseMove])
