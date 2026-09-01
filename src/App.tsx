@@ -41,9 +41,9 @@ const content = {
  * Estos corresponden a imágenes que se encuentran en /public/frames/
  * El índice se actualiza según la posición del mouse del usuario
  * Crea un efecto de "scrubbing" tipo video interactivo en el fondo
- * OPTIMIZADO: 30 frames seleccionados para mejor performance sin perder fluidez
+ * OPTIMIZADO: 40 frames seleccionados para equilibrar fluidez y performance
  */
-const AVAILABLE_FRAMES = [1, 4, 5, 6, 7, 8, 9, 12, 15, 16, 17, 19, 20, 23, 24, 27, 28, 29, 32, 33, 35, 36, 38, 41, 43, 45, 47, 49, 50, 51] as const
+const AVAILABLE_FRAMES = [1, 4, 5, 6, 7, 8, 9, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 41, 43, 45, 47, 49, 50, 51] as const
 
 /**
  * COMPONENTE PRINCIPAL: App
@@ -74,11 +74,11 @@ export default function App() {
     navigator.language.toLowerCase().startsWith('en') ? 'en' : 'es'
   )
 
-  // Tema oscuro (detecta preferencia del sistema, guarda en localStorage)
+  // Tema oscuro (modo claro por defecto, guarda la elección en localStorage)
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     const saved = localStorage.getItem('darkMode')
     if (saved !== null) return saved === 'true'
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
+    return false
   })
 
   // ========================================
