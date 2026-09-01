@@ -74,6 +74,13 @@ export default function App() {
     navigator.language.toLowerCase().startsWith('en') ? 'en' : 'es'
   )
 
+  // Tema oscuro (detecta preferencia del sistema, guarda en localStorage)
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    const saved = localStorage.getItem('darkMode')
+    if (saved !== null) return saved === 'true'
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
+
   // ========================================
   // REFERENCIAS (useRef)
   // ========================================
@@ -140,6 +147,27 @@ export default function App() {
    * 4. Limpia recursos al desmontar
    */
   useEffect(() => {
+    // Guarda la preferencia de dark mode en localStorage
+    localStorage.setItem('darkMode', isDarkMode.toString())
+    
+    // Aplica la clase 'dark' al elemento html para Tailwind CSS
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [isDarkMode])
+
+  /**
+   * EFECTO DE INICIALIZACIÓN
+   * Se ejecuta UNA SOLA VEZ al montar el componente
+   * RESPONSABILIDADES:
+   * 1. Pre-carga todas las imágenes de frames para evitar delays
+   * 2. Agrega listener de mousemove
+   * 3. Muestra los botones CTA después de 400ms (delay estético)
+   * 4. Limpia recursos al desmontar
+   */
+  useEffect(() => {
     // Pre-carga todas las imágenes para que estén listas en caché
     AVAILABLE_FRAMES.forEach((frameNum) => {
       const image = new Image()
@@ -179,35 +207,49 @@ export default function App() {
     await navigator.clipboard.writeText('German35050@gmail.com')
   }
 
+  /**
+   * Cambia entre modo claro y oscuro
+   * Actualiza el estado y guarda en localStorage automáticamente
+   */
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode)
+  }
+
   // ========================================
   // RENDERIZADO JSX
   // ========================================
 
   return (
-    <div className="relative min-h-screen w-full bg-white text-black selection:bg-black/10">
+    <div className="relative min-h-screen w-full bg-white text-black dark:bg-[#0a0e27] dark:text-white selection:bg-black/10 dark:selection:bg-white/10">
       {/* ====== FONDO INTERACTIVO ====== */}
       {/* Imagen de fondo que cambia según la posición del mouse */}
       <img
         src={`${import.meta.env.BASE_URL}frames/frame_${String(AVAILABLE_FRAMES[frameIndex]).padStart(6, '0')}.webp`}
         alt=""
-        className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover object-[50%_center] sm:object-[70%_center]"
+        className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover object-[50%_center] opacity-100 dark:opacity-50 sm:object-[70%_center]"
       />
       
       {/* Gradiente oscuro sobre la imagen para mejorar legibilidad del texto */}
       {/* Gradiente: más oscuro a la izquierda, más transparente a la derecha */}
-      <div className="pointer-events-none fixed inset-0 z-[0] bg-[linear-gradient(90deg,rgba(7,10,16,0.82)_0%,rgba(7,10,16,0.48)_48%,rgba(7,10,16,0.12)_100%)]" aria-hidden="true" />
+      <div className="pointer-events-none fixed inset-0 z-[0] bg-[linear-gradient(90deg,rgba(7,10,16,0.82)_0%,rgba(7,10,16,0.48)_48%,rgba(7,10,16,0.12)_100%)] dark:bg-[linear-gradient(90deg,rgba(10,14,39,0.95)_0%,rgba(10,14,39,0.85)_48%,rgba(10,14,39,0.75)_100%)]" aria-hidden="true" />
 
       {/* ====== NAVEGACIÓN PRINCIPAL (Desktop + Mobile) ====== */}
-      <nav className="fixed left-0 top-0 z-[10] flex w-full items-center justify-between border-b border-white/20 bg-black/20 px-4 py-3 text-white backdrop-blur-md sm:px-6 sm:py-4 md:px-8 md:py-5">
+      <nav className="fixed left-0 top-0 z-[10] flex w-full items-center border-b border-white/20 bg-black/20 px-4 py-3 text-white backdrop-blur-md dark:border-white/10 dark:bg-black/40 sm:px-6 sm:py-4 md:px-8 md:py-5">
         {/* Logo y nombre */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3 lg:gap-6">
           <span className="text-base tracking-tight text-white sm:text-[21px] md:text-[26px]" style={{ fontFamily: 'var(--font-heading)' }}>German Rhenals;</span>
           <span className="select-none text-xl leading-none text-white sm:text-2xl md:text-[30px]">✳︎</span>
+          {/* Toggle switch junto al nombre */}
+          <button type="button" onClick={toggleDarkMode} className="flex translate-x-1 items-center gap-2 text-xs text-white transition-opacity hover:opacity-80 sm:text-sm md:translate-x-2" aria-label="Modo Oscuro" title="Modo Oscuro">
+            <span className="relative block h-6 w-12 rounded-full bg-white/20 transition-colors duration-300 dark:bg-white/30">
+              <span className="absolute left-1 top-1 h-4 w-4 rounded-full bg-yellow-300 transition-transform duration-300 dark:translate-x-6 dark:bg-blue-300" />
+            </span>
+            <span className="hidden lg:inline">Modo Oscuro</span>
+          </button>
         </div>
 
         {/* Menú de navegación (solo visible en md y superiores) */}
-        {/* Menú de navegación (solo visible en md y superiores) */}
-        <div className="hidden items-center gap-0 text-sm text-white md:flex md:text-base lg:text-lg">
+        <div className="hidden flex-1 translate-x-1 items-center justify-center gap-0 text-sm text-white md:flex md:text-base lg:text-lg">
           {/* Mapea los elementos del menú con separadores (comas) */}
           {text.nav.map((link, index) => (
             <span key={link}>
@@ -217,10 +259,9 @@ export default function App() {
           ))}
         </div>
 
-        {/* Botones de Contacto e Idioma (solo visible en md y superiores) */}
-        <div className="hidden items-center gap-3 md:flex md:gap-4">
+        {/* Acciones principales alineadas al extremo derecho */}
+        <div className="hidden flex-1 items-center justify-end gap-4 md:flex lg:gap-6">
           <a href="#contact" className="text-sm text-white underline underline-offset-2 transition-opacity hover:opacity-60 md:text-base lg:text-lg">{text.contact}</a>
-          {/* Botón para cambiar idioma */}
           <button type="button" onClick={() => setLanguage(language === 'es' ? 'en' : 'es')} className="text-xs font-medium uppercase tracking-wide text-white transition-opacity hover:opacity-60 md:text-sm" aria-label="Change language">{language === 'es' ? 'EN' : 'ES'}</button>
         </div>
 
@@ -238,13 +279,19 @@ export default function App() {
 
       {/* ====== MENÚ MÓVIL (Overlay) ====== */}
       {/* Solo visible cuando isMenuOpen es true, hidden en md y superiores */}
-      <div className={`fixed inset-0 z-[9] flex flex-col justify-center gap-6 bg-[#080b12]/95 px-6 text-white backdrop-blur-sm transition-all duration-300 md:hidden ${isMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}>
+      <div className={`fixed inset-0 z-[9] flex flex-col justify-center gap-6 bg-[#080b12]/95 dark:bg-[#0a0e27]/95 px-6 text-white backdrop-blur-sm transition-all duration-300 md:hidden ${isMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}>
         {/* Enlaces del menú */}
         {text.nav.map((link, index) => <a key={link} href={`#${['about', 'services', 'technologies', 'projects'][index]}`} onClick={() => setIsMenuOpen(false)} className="text-2xl font-medium sm:text-3xl">{link}</a>)}
         {/* Enlace de contacto */}
         <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-2xl font-medium underline underline-offset-4 sm:text-3xl">{text.contact}</a>
-        {/* Botón para cambiar idioma en móvil */}
-        <button type="button" onClick={() => setLanguage(language === 'es' ? 'en' : 'es')} className="w-fit text-base font-medium uppercase sm:text-lg">{language === 'es' ? 'English' : 'Español'}</button>
+        {/* Botones para cambiar idioma y tema en móvil */}
+        <div className="flex gap-4 items-center">
+          <button type="button" onClick={() => setLanguage(language === 'es' ? 'en' : 'es')} className="w-fit text-base font-medium uppercase sm:text-lg">{language === 'es' ? 'English' : 'Español'}</button>
+          {/* Toggle switch para dark mode en móvil */}
+          <button type="button" onClick={toggleDarkMode} className="relative w-12 h-6 rounded-full bg-white/20 transition-colors duration-300 dark:bg-white/30" aria-label="Toggle dark mode" title="Modo Oscuro">
+            <div className="absolute top-1 left-1 w-4 h-4 bg-yellow-300 rounded-full transition-transform duration-300 dark:translate-x-6 dark:bg-blue-300" />
+          </button>
+        </div>
       </div>
 
       {/* ====== CONTENIDO PRINCIPAL ====== */}
@@ -301,27 +348,27 @@ export default function App() {
 
         {/* ====== SECCIONES DE CONTENIDO ====== */}
         {/* Contenedor con fondo diferente que sobresale a los lados */}
-        <div className="-mx-4 bg-[#f3f0ea] px-4 text-[#15181d] sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
+        <div className="-mx-4 bg-[#f3f0ea] dark:bg-[#0f1629] px-4 text-[#15181d] dark:text-white sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
           {/* ====== SECCIÓN 01: SOBRE MÍ (ABOUT) ====== */}
-          <section id="about" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 py-16 sm:py-20 md:py-28 lg:py-32">
+          <section id="about" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 sm:py-20 md:py-28 lg:py-32">
             <div className="grid gap-6 sm:gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-12 lg:gap-16">
               {/* Número y título de sección */}
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50">01 / {text.aboutTitle}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">01 / {text.aboutTitle}</p>
               {/* Contenido: biografía del desarrollador */}
               <p className="max-w-3xl text-base leading-relaxed sm:text-lg md:text-2xl lg:text-3xl">{text.about}</p>
             </div>
           </section>
 
           {/* ====== SECCIÓN 02: SERVICIOS ====== */}
-          <section id="services" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 py-16 sm:py-20 md:py-28 lg:py-32">
+          <section id="services" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 sm:py-20 md:py-28 lg:py-32">
             <div className="grid gap-6 sm:gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-12 lg:gap-16">
               {/* Número y título de sección */}
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50">02 / {text.servicesTitle}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">02 / {text.servicesTitle}</p>
               {/* Lista de servicios con números secuenciales */}
-              <div className="grid border-t border-black/20 md:grid-cols-2">
+              <div className="grid border-t border-black/20 dark:border-white/10 md:grid-cols-2">
                 {text.services.map((service, index) => (
-                  <p key={service} className="border-b border-black/20 py-4 text-base sm:py-5 sm:text-lg md:text-xl lg:text-2xl">
-                    <span className="mr-3 text-xs text-black/45 sm:mr-5">0{index + 1}</span>{service}
+                  <p key={service} className="border-b border-black/20 dark:border-white/10 py-4 text-base sm:py-5 sm:text-lg md:text-xl lg:text-2xl">
+                    <span className="mr-3 text-xs text-black/45 dark:text-white/45 sm:mr-5">0{index + 1}</span>{service}
                   </p>
                 ))}
               </div>
@@ -329,24 +376,24 @@ export default function App() {
           </section>
 
           {/* ====== SECCIÓN 03: TECNOLOGÍAS ====== */}
-          <section id="technologies" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 py-16 sm:py-20 md:py-28 lg:py-32">
+          <section id="technologies" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 sm:py-20 md:py-28 lg:py-32">
             <div className="grid gap-6 sm:gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-12 lg:gap-16">
               {/* Número y título de sección */}
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50">03 / {text.technologiesTitle}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">03 / {text.technologiesTitle}</p>
               {/* Tags de tecnologías con bordes */}
               <div className="flex flex-wrap gap-2">
                 {['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'HTML', 'CSS', 'JavaScript', 'Python', 'Java', 'Node.js', 'MongoDB', 'SQL', 'Unity', 'C#'].map((technology) => (
-                  <span key={technology} className="border border-black/25 px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm">{technology}</span>
+                  <span key={technology} className="border border-black/25 dark:border-white/20 px-2 py-1 text-xs sm:px-3 sm:py-2 sm:text-sm">{technology}</span>
                 ))}
               </div>
             </div>
           </section>
 
           {/* ====== SECCIÓN 04: PROYECTOS DESTACADOS ====== */}
-          <section id="projects" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 py-16 sm:py-20 md:py-28 lg:py-32">
+          <section id="projects" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 sm:py-20 md:py-28 lg:py-32">
             <div className="grid gap-6 sm:gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-12 lg:gap-16">
               {/* Número y título de sección */}
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50">04 / {text.projectsTitle}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">04 / {text.projectsTitle}</p>
               {/* Contenido del proyecto */}
               <div>
                 {/* Nombre del proyecto */}
@@ -354,34 +401,34 @@ export default function App() {
                 {/* Descripción del proyecto */}
                 <p className="mb-6 max-w-2xl text-base leading-relaxed sm:mb-7 sm:text-lg md:text-xl">{text.projectDescription}</p>
                 {/* Enlace al proyecto en vivo */}
-                <a href="https://germanrhenals.github.io/Rincon-Caribe-o/" target="_blank" rel="noreferrer" className="inline-flex border-b border-black pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 sm:text-sm">{text.viewProject} ↗</a>
+                <a href="https://germanrhenals.github.io/Rincon-Caribe-o/" target="_blank" rel="noreferrer" className="inline-flex border-b border-black dark:border-white pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 sm:text-sm">{text.viewProject} ↗</a>
               </div>
             </div>
           </section>
 
           {/* ====== SECCIÓN 05: CONTACTO ====== */}
-          <section id="contact" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 py-16 pb-20 sm:py-20 sm:pb-24 md:py-28 md:pb-32 lg:py-32">
+          <section id="contact" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 pb-20 sm:py-20 sm:pb-24 md:py-28 md:pb-32 lg:py-32">
             {/* Fondo oscuro para contrastar con el resto del contenido */}
-            <div className="bg-[#15181d] px-5 py-8 text-white sm:px-8 sm:py-12 md:px-10 md:py-16 lg:px-12">
+            <div className="bg-[#15181d] dark:bg-[#0a0e27] px-5 py-8 text-white sm:px-8 sm:py-12 md:px-10 md:py-16 lg:px-12">
               {/* Número y título de sección */}
-              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/50 sm:mb-6">05 / Contact</p>
+              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/50 dark:text-white/40 sm:mb-6">05 / Contact</p>
               
               {/* Título principal */}
               <h2 className="mb-4 text-2xl font-medium sm:mb-5 sm:text-3xl md:text-5xl lg:text-6xl">{text.contactTitle}</h2>
               
               {/* Descripción de contacto */}
-              <p className="mb-6 max-w-2xl text-base leading-relaxed text-white/75 sm:mb-7 sm:text-lg md:text-xl">{text.contactText}</p>
+              <p className="mb-6 max-w-2xl text-base leading-relaxed text-white/75 dark:text-white/70 sm:mb-7 sm:text-lg md:text-xl">{text.contactText}</p>
               
               {/* CTA principal: Email y CV */}
               <div className="flex flex-wrap items-center gap-3 text-base sm:gap-4 sm:text-lg">
                 {/* Email directo */}
                 <a href="mailto:German35050@gmail.com" className="underline underline-offset-4 text-sm sm:text-base">German35050@gmail.com</a>
                 {/* Botón para descargar CV */}
-                <a href={`${import.meta.env.BASE_URL}Hoja_de_vida_German_en.pdf`} target="_blank" rel="noreferrer" className="border border-white/50 px-4 py-2 text-xs transition-colors hover:bg-white hover:text-[#15181d] sm:px-5 sm:py-2 sm:text-sm">{text.cv}</a>
+                <a href={`${import.meta.env.BASE_URL}Hoja_de_vida_German_en.pdf`} target="_blank" rel="noreferrer" className="border border-white/50 dark:border-white/40 px-4 py-2 text-xs transition-colors hover:bg-white hover:text-[#15181d] dark:hover:bg-white/20 dark:hover:text-white sm:px-5 sm:py-2 sm:text-sm">{text.cv}</a>
               </div>
               
               {/* Enlaces a redes sociales */}
-              <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/70 underline underline-offset-4 sm:gap-4 sm:text-sm">
+              <div className="mt-6 flex flex-wrap gap-3 text-xs text-white/70 dark:text-white/60 underline underline-offset-4 sm:gap-4 sm:text-sm">
                 <a href="https://github.com/GermanRhenals" target="_blank" rel="noreferrer">GitHub</a>
                 <a href="https://www.linkedin.com/in/germ%C3%A1n-rhenals-048b0521b/" target="_blank" rel="noreferrer">LinkedIn</a>
                 <a href="https://www.instagram.com/_rhever/" target="_blank" rel="noreferrer">Instagram</a>
