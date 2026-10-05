@@ -22,8 +22,10 @@ const content = {
     availability: 'Disponible para oportunidades remotas o en otra ciudad.', aboutTitle: 'Sobre mí',
     about: 'Soy German Rhenals, desarrollador de software con dos años de formación y práctica construyendo proyectos web. También he explorado el desarrollo de videojuegos 2D con Unity a través de proyectos personales. Soy constante, disciplinado y disfruto encontrar la manera de sumar en cada equipo.',
     servicesTitle: 'Lo que puedo aportar', services: ['Desarrollo web', 'Soluciones tecnológicas', 'Soporte TI', 'Mantenimiento de software', 'Implementaciones con IA', 'Automatización'], technologiesTitle: 'Tecnologías', projectsTitle: 'Proyecto destacado',
-    projectDescription: 'Portafolio y catálogo de servicios para El Rincón Caribeño, el estadero cubierto más grande de la región.', viewProject: 'Ver proyecto', contactTitle: 'Construyamos algo',
-    contactText: 'Estoy abierto a oportunidades laborales, proyectos freelance y retos que me permitan seguir creciendo.', cv: 'Descargar CV', copy: 'Copiar correo',
+    projectDescription: 'Portafolio y catálogo de servicios para El Rincón Caribeño, el estadero cubierto más grande de la región.', viewProject: 'Ver proyecto', inConstruction: 'Proyecto en construcción',
+    inConstructionEyebrow: 'Nueva iniciativa', inConstructionTitle: 'Barflow', inConstructionDescription: 'Un sistema POS para ofrecer a los negocios una opción gratuita de controlar sus ventas e inventarios.',
+    inConstructionStatus: 'En desarrollo', inConstructionGoal: 'Objetivo', inConstructionGoalValue: 'Ventas e inventarios', inConstructionRepository: 'Ver repositorio', inConstructionNote: 'Proyecto abierto y en evolución.',
+    contactTitle: 'Construyamos algo', contactText: 'Estoy abierto a oportunidades laborales, proyectos freelance y retos que me permitan seguir creciendo.', cv: 'Descargar CV', copy: 'Copiar correo',
   },
   en: {
     nav: ['About', 'Services', 'Technologies', 'Projects'], contact: "Let's talk", role: 'Software Developer',
@@ -31,8 +33,10 @@ const content = {
     availability: 'Available for remote opportunities or relocation.', aboutTitle: 'About me',
     about: 'I am German Rhenals, a software developer with two years of training and hands-on practice building web projects. I have also explored 2D game development with Unity through personal projects. I am consistent, disciplined, and enjoy finding ways to contribute to every team.',
     servicesTitle: 'What I can bring', services: ['Web development', 'Technology solutions', 'IT support', 'Software maintenance', 'AI implementations', 'Automation'], technologiesTitle: 'Technologies', projectsTitle: 'Featured project',
-    projectDescription: 'Portfolio and service catalog for El Rincón Caribeño, the largest covered leisure venue in the region.', viewProject: 'View project', contactTitle: "Let's build something",
-    contactText: 'I am open to job opportunities, freelance projects, and challenges that help me keep growing.', cv: 'Download CV', copy: 'Copy email',
+    projectDescription: 'Portfolio and service catalog for El Rincón Caribeño, the largest covered leisure venue in the region.', viewProject: 'View project', inConstruction: 'Project under construction',
+    inConstructionEyebrow: 'New initiative', inConstructionTitle: 'Barflow', inConstructionDescription: 'A POS system designed to give businesses a free option to control their sales and inventory.',
+    inConstructionStatus: 'In development', inConstructionGoal: 'Goal', inConstructionGoalValue: 'Sales and inventory', inConstructionRepository: 'View repository', inConstructionNote: 'Open project and currently evolving.',
+    contactTitle: "Let's build something", contactText: 'I am open to job opportunities, freelance projects, and challenges that help me keep growing.', cv: 'Download CV', copy: 'Copy email',
   },
 } as const
 
@@ -41,9 +45,9 @@ const content = {
  * Estos corresponden a imágenes que se encuentran en /public/frames/
  * El índice se actualiza según la posición del mouse del usuario
  * Crea un efecto de "scrubbing" tipo video interactivo en el fondo
- * OPTIMIZADO: 40 frames seleccionados para equilibrar fluidez y performance
+ * OPTIMIZADO: 5 fotogramas seleccionados para equilibrar fluidez y rendimiento
  */
-const AVAILABLE_FRAMES = [1, 4, 5, 6, 7, 8, 9, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 41, 43, 45, 47, 49, 50, 51] as const
+const AVAILABLE_FRAMES = [1, 8, 18, 36, 51] as const
 
 /**
  * COMPONENTE PRINCIPAL: App
@@ -406,12 +410,60 @@ export default function App() {
             </div>
           </section>
 
-          {/* ====== SECCIÓN 05: CONTACTO ====== */}
+          {/* ====== SECCIÓN 05: PROYECTO EN CONSTRUCCIÓN ====== */}
+          <section id="in-construction" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 sm:py-20 md:py-28 lg:py-32">
+            <div className="grid gap-6 sm:gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-12 lg:gap-16">
+              {/* Número y título de sección */}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">05 / {text.inConstruction}</p>
+                <p className="mt-4 text-xs uppercase tracking-[0.16em] text-black/45 dark:text-white/45">{text.inConstructionEyebrow}</p>
+              </div>
+
+              {/* Tarjeta del proyecto en desarrollo */}
+              <div className="group relative overflow-hidden border border-black/20 bg-white/55 p-5 shadow-[0_18px_60px_rgba(0,0,0,0.08)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_80px_rgba(0,0,0,0.14)] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[0_18px_60px_rgba(0,0,0,0.28)] sm:p-7 md:p-9 lg:p-11">
+                <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[#d9e7ff] opacity-50 blur-3xl transition-transform duration-700 group-hover:scale-125 dark:bg-blue-500/20" aria-hidden="true" />
+                <div className="relative">
+                  <div className="mb-7 flex flex-wrap items-center justify-between gap-4 border-b border-black/15 pb-5 dark:border-white/10">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#15181d] text-sm text-white dark:bg-white dark:text-[#15181d]">B</span>
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.18em] text-black/45 dark:text-white/45">{text.inConstructionStatus}</p>
+                        <h2 className="text-2xl font-medium sm:text-3xl md:text-4xl">{text.inConstructionTitle}</h2>
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-black/20 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] dark:border-white/20 sm:text-xs">
+                      <span className="h-2 w-2 animate-blink rounded-full bg-amber-500" />
+                      {text.inConstructionStatus}
+                    </span>
+                  </div>
+
+                  <p className="mb-6 max-w-2xl text-base leading-relaxed sm:text-lg md:text-xl">{text.inConstructionDescription}</p>
+
+                  <div className="mb-7 grid gap-3 sm:grid-cols-2">
+                    <div className="border border-black/15 px-4 py-4 dark:border-white/10">
+                      <p className="mb-1 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.inConstructionGoal}</p>
+                      <p className="text-sm sm:text-base">{text.inConstructionGoalValue}</p>
+                    </div>
+                    <div className="border border-black/15 px-4 py-4 dark:border-white/10">
+                      <p className="mb-1 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.inConstructionStatus}</p>
+                      <p className="text-sm sm:text-base">{text.inConstructionNote}</p>
+                    </div>
+                  </div>
+
+                  <a href="https://github.com/GermanRhenals/pos-systems" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border-b border-black pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 dark:border-white sm:text-sm">
+                    {text.inConstructionRepository} ↗
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ====== SECCIÓN 06: CONTACTO ====== */}
           <section id="contact" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 pb-20 sm:py-20 sm:pb-24 md:py-28 md:pb-32 lg:py-32">
             {/* Fondo oscuro para contrastar con el resto del contenido */}
             <div className="bg-[#15181d] dark:bg-[#0a0e27] px-5 py-8 text-white sm:px-8 sm:py-12 md:px-10 md:py-16 lg:px-12">
               {/* Número y título de sección */}
-              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/50 dark:text-white/40 sm:mb-6">05 / Contact</p>
+              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/50 dark:text-white/40 sm:mb-6">06 / Contact</p>
               
               {/* Título principal */}
               <h2 className="mb-4 text-2xl font-medium sm:mb-5 sm:text-3xl md:text-5xl lg:text-6xl">{text.contactTitle}</h2>
