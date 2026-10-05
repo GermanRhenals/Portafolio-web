@@ -45,9 +45,9 @@ const content = {
  * Estos corresponden a imágenes que se encuentran en /public/frames/
  * El índice se actualiza según la posición del mouse del usuario
  * Crea un efecto de "scrubbing" tipo video interactivo en el fondo
- * OPTIMIZADO: 5 fotogramas seleccionados para equilibrar fluidez y rendimiento
+ * OPTIMIZADO: 40 frames seleccionados para equilibrar fluidez y performance
  */
-const AVAILABLE_FRAMES = [1, 8, 18, 36, 51] as const
+const AVAILABLE_FRAMES = [1, 4, 5, 6, 7, 8, 9, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 41, 43, 45, 47, 49, 50, 51] as const
 
 /**
  * COMPONENTE PRINCIPAL: App
