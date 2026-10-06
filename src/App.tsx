@@ -17,24 +17,32 @@ type Language = 'es' | 'en'
  */
 const content = {
   es: {
-    nav: ['Sobre mí', 'Servicios', 'Tecnologías', 'Proyectos'], contact: 'Hablemos', role: 'Software Developer',
+    nav: ['Sobre mí', 'Servicios', 'Tecnologías', 'Novedades', 'Proyectos'], contact: 'Hablemos', role: 'Software Developer',
     intro: 'Desarrollo soluciones digitales con disciplina, curiosidad y ganas de afrontar nuevos retos.',
     availability: 'Disponible para oportunidades remotas o en otra ciudad.', aboutTitle: 'Sobre mí',
     about: 'Soy German Rhenals, desarrollador de software con dos años de formación y práctica construyendo proyectos web. También he explorado el desarrollo de videojuegos 2D con Unity a través de proyectos personales. Soy constante, disciplinado y disfruto encontrar la manera de sumar en cada equipo.',
-    servicesTitle: 'Lo que puedo aportar', services: ['Desarrollo web', 'Soluciones tecnológicas', 'Soporte TI', 'Mantenimiento de software', 'Implementaciones con IA', 'Automatización'], technologiesTitle: 'Tecnologías', projectsTitle: 'Proyecto destacado',
+    servicesTitle: 'Lo que puedo aportar', services: ['Desarrollo web', 'Soluciones tecnológicas', 'Soporte TI', 'Mantenimiento de software', 'Implementaciones con IA', 'Automatización'], technologiesTitle: 'Tecnologías', updatesTitle: 'Novedades', updatesIntro: 'Un vistazo a los proyectos y avances más recientes.', updates: [
+      { status: 'Nueva identidad', title: 'Kuantika POS', description: 'El proyecto antes llamado Barflow evoluciona con una nueva identidad y herramientas para gestionar la operación completa de un establecimiento.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
+      { status: 'Nuevas funciones', title: 'Pedidos, inventario y ventas', description: 'El equipo de sala puede enviar pedidos al bar; al despacharlos, se actualiza el inventario y se registra la venta. También se puede consultar el desempeño por distintos períodos.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
+      { status: 'Datos sincronizados', title: 'Roles y operación en la nube', description: 'Administradores, personal de sala y bar cuentan con accesos según su función. Los datos se guardan en Supabase y se sincronizan entre dispositivos; además, se puede cerrar el turno y generar un PDF.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
+    ], projectsTitle: 'Proyecto destacado',
     projectDescription: 'Portafolio y catálogo de servicios para El Rincón Caribeño, el estadero cubierto más grande de la región.', viewProject: 'Ver proyecto', inConstruction: 'Proyecto en construcción',
-    inConstructionEyebrow: 'Nueva iniciativa', inConstructionTitle: 'Barflow', inConstructionDescription: 'Un sistema POS para ofrecer a los negocios una opción gratuita de controlar sus ventas e inventarios.',
+    inConstructionEyebrow: 'Nueva iniciativa', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'Sistema POS para establecimientos que integra inventario, pedidos de sala al bar, registro de ventas, gestión de equipo e informes de operación.',
     inConstructionStatus: 'En desarrollo', inConstructionGoal: 'Objetivo', inConstructionGoalValue: 'Ventas e inventarios', inConstructionRepository: 'Ver repositorio', inConstructionNote: 'Proyecto abierto y en evolución.',
     contactTitle: 'Construyamos algo', contactText: 'Estoy abierto a oportunidades laborales, proyectos freelance y retos que me permitan seguir creciendo.', cv: 'Descargar CV', copy: 'Copiar correo',
   },
   en: {
-    nav: ['About', 'Services', 'Technologies', 'Projects'], contact: "Let's talk", role: 'Software Developer',
+    nav: ['About', 'Services', 'Technologies', 'Updates', 'Projects'], contact: "Let's talk", role: 'Software Developer',
     intro: 'I build digital solutions with discipline, curiosity, and the drive to take on new challenges.',
     availability: 'Available for remote opportunities or relocation.', aboutTitle: 'About me',
     about: 'I am German Rhenals, a software developer with two years of training and hands-on practice building web projects. I have also explored 2D game development with Unity through personal projects. I am consistent, disciplined, and enjoy finding ways to contribute to every team.',
-    servicesTitle: 'What I can bring', services: ['Web development', 'Technology solutions', 'IT support', 'Software maintenance', 'AI implementations', 'Automation'], technologiesTitle: 'Technologies', projectsTitle: 'Featured project',
+    servicesTitle: 'What I can bring', services: ['Web development', 'Technology solutions', 'IT support', 'Software maintenance', 'AI implementations', 'Automation'], technologiesTitle: 'Technologies', updatesTitle: 'Latest updates', updatesIntro: 'A look at the latest projects and progress.', updates: [
+      { status: 'New identity', title: 'Kuantika POS', description: 'The project formerly known as Barflow has a new identity and new tools to manage a venue’s day-to-day operations.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
+      { status: 'New features', title: 'Orders, inventory and sales', description: 'Floor staff can send orders to the bar; when fulfilled, inventory is updated and the sale is recorded. Performance can also be reviewed across different time periods.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
+      { status: 'Synced data', title: 'Roles and cloud operations', description: 'Admins, floor staff and bar staff have access tailored to their roles. Data is stored in Supabase and synced across devices; shifts can also be closed and exported as a PDF.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
+    ], projectsTitle: 'Featured project',
     projectDescription: 'Portfolio and service catalog for El Rincón Caribeño, the largest covered leisure venue in the region.', viewProject: 'View project', inConstruction: 'Project under construction',
-    inConstructionEyebrow: 'New initiative', inConstructionTitle: 'Barflow', inConstructionDescription: 'A POS system designed to give businesses a free option to control their sales and inventory.',
+    inConstructionEyebrow: 'New initiative', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'A POS system for venues that brings together inventory, floor-to-bar orders, sales tracking, team management, and operational reports.',
     inConstructionStatus: 'In development', inConstructionGoal: 'Goal', inConstructionGoalValue: 'Sales and inventory', inConstructionRepository: 'View repository', inConstructionNote: 'Open project and currently evolving.',
     contactTitle: "Let's build something", contactText: 'I am open to job opportunities, freelance projects, and challenges that help me keep growing.', cv: 'Download CV', copy: 'Copy email',
   },
@@ -57,7 +65,7 @@ const AVAILABLE_FRAMES = [1, 4, 5, 6, 7, 8, 9, 12, 15, 16, 17, 18, 19, 20, 21, 2
  * 1. Animación de frames interactiva (sigue el mouse)
  * 2. Soporte multiidioma (ES/EN)
  * 3. Menú responsive (desktop y mobile)
- * 4. Secciones: Hero, About, Services, Technologies, Projects, Contact
+ * 4. Secciones: Hero, About, Services, Technologies, Updates, Projects, Contact
  */
 export default function App() {
   // ========================================
@@ -139,7 +147,7 @@ export default function App() {
       // Inicia la animación
       animationFrame.current = window.requestAnimationFrame(updateFrame)
     }
-  }, [])
+  }, [frameCount])
 
   /**
    * EFECTO DE INICIALIZACIÓN
@@ -257,7 +265,7 @@ export default function App() {
           {/* Mapea los elementos del menú con separadores (comas) */}
           {text.nav.map((link, index) => (
             <span key={link}>
-              <a href={`#${['about', 'services', 'technologies', 'projects'][index]}`} className="transition-opacity hover:opacity-60">{link}</a>
+              <a href={`#${['about', 'services', 'technologies', 'updates', 'projects'][index]}`} className="transition-opacity hover:opacity-60">{link}</a>
               {index < text.nav.length - 1 && <span className="mr-2">,</span>}
             </span>
           ))}
@@ -285,7 +293,7 @@ export default function App() {
       {/* Solo visible cuando isMenuOpen es true, hidden en md y superiores */}
       <div className={`fixed inset-0 z-[9] flex flex-col justify-center gap-6 bg-[#080b12]/95 dark:bg-[#0a0e27]/95 px-6 text-white backdrop-blur-sm transition-all duration-300 md:hidden ${isMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}>
         {/* Enlaces del menú */}
-        {text.nav.map((link, index) => <a key={link} href={`#${['about', 'services', 'technologies', 'projects'][index]}`} onClick={() => setIsMenuOpen(false)} className="text-2xl font-medium sm:text-3xl">{link}</a>)}
+        {text.nav.map((link, index) => <a key={link} href={`#${['about', 'services', 'technologies', 'updates', 'projects'][index]}`} onClick={() => setIsMenuOpen(false)} className="text-2xl font-medium sm:text-3xl">{link}</a>)}
         {/* Enlace de contacto */}
         <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-2xl font-medium underline underline-offset-4 sm:text-3xl">{text.contact}</a>
         {/* Botones para cambiar idioma y tema en móvil */}
@@ -393,11 +401,31 @@ export default function App() {
             </div>
           </section>
 
-          {/* ====== SECCIÓN 04: PROYECTOS DESTACADOS ====== */}
+          {/* ====== SECCIÓN 04: NOVEDADES ====== */}
+          <section id="updates" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 sm:py-20 md:py-28 lg:py-32">
+            <div className="grid gap-6 sm:gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-12 lg:gap-16">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">04 / {text.updatesTitle}</p>
+              <div>
+                <p className="mb-8 max-w-2xl text-base leading-relaxed text-black/65 dark:text-white/65 sm:text-lg">{text.updatesIntro}</p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {text.updates.map((update) => (
+                    <article key={update.title} className="flex flex-col border border-black/20 bg-white/45 p-5 dark:border-white/10 dark:bg-white/[0.03] sm:p-6">
+                      <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-black/50 dark:text-white/50">{update.status}</p>
+                      <h2 className="mb-3 text-xl font-medium sm:text-2xl">{update.title}</h2>
+                      <p className="mb-6 flex-1 text-sm leading-relaxed text-black/70 dark:text-white/70 sm:text-base">{update.description}</p>
+                      <a href={update.href} target="_blank" rel="noreferrer" className="w-fit border-b border-black pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 dark:border-white sm:text-sm">{update.link} ↗</a>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ====== SECCIÓN 05: PROYECTOS DESTACADOS ====== */}
           <section id="projects" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 sm:py-20 md:py-28 lg:py-32">
             <div className="grid gap-6 sm:gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-12 lg:gap-16">
               {/* Número y título de sección */}
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">04 / {text.projectsTitle}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">05 / {text.projectsTitle}</p>
               {/* Contenido del proyecto */}
               <div>
                 {/* Nombre del proyecto */}
@@ -410,12 +438,12 @@ export default function App() {
             </div>
           </section>
 
-          {/* ====== SECCIÓN 05: PROYECTO EN CONSTRUCCIÓN ====== */}
+          {/* ====== SECCIÓN 06: PROYECTO EN CONSTRUCCIÓN ====== */}
           <section id="in-construction" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 sm:py-20 md:py-28 lg:py-32">
             <div className="grid gap-6 sm:gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-12 lg:gap-16">
               {/* Número y título de sección */}
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">05 / {text.inConstruction}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">06 / {text.inConstruction}</p>
                 <p className="mt-4 text-xs uppercase tracking-[0.16em] text-black/45 dark:text-white/45">{text.inConstructionEyebrow}</p>
               </div>
 
@@ -463,7 +491,7 @@ export default function App() {
             {/* Fondo oscuro para contrastar con el resto del contenido */}
             <div className="bg-[#15181d] dark:bg-[#0a0e27] px-5 py-8 text-white sm:px-8 sm:py-12 md:px-10 md:py-16 lg:px-12">
               {/* Número y título de sección */}
-              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/50 dark:text-white/40 sm:mb-6">06 / Contact</p>
+              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/50 dark:text-white/40 sm:mb-6">07 / Contact</p>
               
               {/* Título principal */}
               <h2 className="mb-4 text-2xl font-medium sm:mb-5 sm:text-3xl md:text-5xl lg:text-6xl">{text.contactTitle}</h2>
