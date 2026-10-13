@@ -504,7 +504,7 @@ export default function App() {
                 {/* Email directo */}
                 <a href="mailto:German35050@gmail.com" className="underline underline-offset-4 text-sm sm:text-base">German35050@gmail.com</a>
                 {/* Botón para descargar CV */}
-                <a href={`${import.meta.env.BASE_URL}Hoja_de_vida_German_en.pdf`} target="_blank" rel="noreferrer" className="border border-white/50 dark:border-white/40 px-4 py-2 text-xs transition-colors hover:bg-white hover:text-[#15181d] dark:hover:bg-white/20 dark:hover:text-white sm:px-5 sm:py-2 sm:text-sm">{text.cv}</a>
+                <a href={`${import.meta.env.BASE_URL}German-Rhenals_cv.pdf`} download="German-Rhenals_cv.pdf" className="border border-white/50 dark:border-white/40 px-4 py-2 text-xs transition-colors hover:bg-white hover:text-[#15181d] dark:hover:bg-white/20 dark:hover:text-white sm:px-5 sm:py-2 sm:text-sm">{text.cv}</a>
               </div>
               
               {/* Enlaces a redes sociales */}
