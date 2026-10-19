@@ -22,17 +22,18 @@ const content = {
     availability: 'Disponible para oportunidades remotas o en otra ciudad.', aboutTitle: 'Sobre mí',
     about: 'Soy German Rhenals, desarrollador de software con dos años de formación y práctica construyendo proyectos web. También he explorado el desarrollo de videojuegos 2D con Unity a través de proyectos personales. Soy constante, disciplinado y disfruto encontrar la manera de sumar en cada equipo.',
     servicesTitle: 'Lo que puedo aportar', services: ['Desarrollo web', 'Soluciones tecnológicas', 'Soporte TI', 'Mantenimiento de software', 'Implementaciones con IA', 'Automatización'], technologiesTitle: 'Tecnologías', updatesTitle: 'Novedades', updatesIntro: 'Un vistazo a los proyectos y avances más recientes.', updates: [
-      { status: 'Registro de incidentes', title: 'Incidentes desde el admin', description: 'Desde la consola de administración se pueden registrar incidentes operacionales (daño, faltante, defectuoso u otro) con cantidad, valor y ajuste de inventario, y revisar el total de pérdidas del turno.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
-      { status: 'Ventas directas', title: 'Venta directa en el bar', description: 'El personal del bar ya puede registrar ventas directas desde su vista, sin pasar por un pedido de sala. La venta queda en el canal barra y actualiza el inventario al despacharse.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
-      { status: 'Nueva identidad', title: 'Kuantika POS', description: 'El proyecto antes llamado Barflow evoluciona con una nueva identidad y herramientas para gestionar la operación completa de un establecimiento.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
-      { status: 'Nuevas funciones', title: 'Pedidos, inventario y ventas', description: 'El equipo de sala puede enviar pedidos al bar; al despacharlos, se actualiza el inventario y se registra la venta. También se puede consultar el desempeño por distintos períodos.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
       { status: 'Datos sincronizados', title: 'Roles y operación en la nube', description: 'Administradores, personal de sala y bar cuentan con accesos según su función. Los datos se guardan en Supabase y se sincronizan entre dispositivos; además, se puede cerrar el turno y generar un PDF.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
       { status: 'Vista previa de roles', title: 'Modo sandbox en la consola root', description: 'Desde la consola root se puede entrar en un entorno de prueba efímero y usar el selector "Ver como" para simular los roles de administrador, sala y bar, revisando cada vista sin tocar datos reales.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
       { status: 'Mejoras móviles', title: 'Consola root legible en celular', description: 'Se reorganizaron los estilos con tokens de diseño y se ajustaron las vistas de la consola root para que tablas, formularios y controles se lean bien en pantallas pequeñas.', link: 'Ver repositorio', href: 'https://github.com/GermanRhenals/pos-systems' },
     ], projectsTitle: 'Proyecto destacado',
     projectDescription: 'Portafolio y catálogo de servicios para El Rincón Caribeño, el estadero cubierto más grande de la región.', viewProject: 'Ver proyecto', inConstruction: 'Proyecto en operación',
-    inConstructionEyebrow: 'Primeros clientes', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'Sistema POS para establecimientos que integra inventario, pedidos de sala al bar, registro de ventas, gestión de equipo e informes de operación.',
-    inConstructionStatus: 'En operación', inConstructionGoal: 'Objetivo', inConstructionGoalValue: 'Ventas e inventarios', inConstructionRepository: 'Ver repositorio', inConstructionNote: 'Proyecto open source en operación con clientes reales.',
+    inConstructionEyebrow: 'Primeros clientes', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'Sistema POS para establecimientos —antes conocido como Barflow— que integra inventario, pedidos de sala al bar, registro de ventas, gestión de equipo e informes de operación.',
+    inConstructionStatus: 'En operación', inConstructionGoal: 'Objetivo', inConstructionGoalValue: 'Ventas e inventarios', inConstructionCapabilitiesTitle: 'Lo que hace la aplicación', inConstructionCapabilities: [
+      { title: 'Pedidos de sala al bar', description: 'El equipo de sala envía pedidos al bar y el personal del bar los despacha desde su vista.' },
+      { title: 'Inventario y existencias', description: 'El inventario se descuenta automáticamente al despachar cada pedido y al registrar cada venta.' },
+      { title: 'Incidentes y pérdidas', description: 'Registro de daño, faltante o defectuoso con ajuste de inventario y total de pérdidas del turno.' },
+      { title: 'Venta directa en barra', description: 'El bar registra ventas directas sin pasar por un pedido de sala, actualizando el inventario al despacharse.' },
+    ], inConstructionRepository: 'Ver repositorio', inConstructionNote: 'Proyecto open source en operación con clientes reales.',
     contactTitle: 'Construyamos algo', contactText: 'Estoy abierto a oportunidades laborales, proyectos freelance y retos que me permitan seguir creciendo.', cv: 'Descargar CV', copy: 'Copiar correo',
   },
   en: {
@@ -41,17 +42,18 @@ const content = {
     availability: 'Available for remote opportunities or relocation.', aboutTitle: 'About me',
     about: 'I am German Rhenals, a software developer with two years of training and hands-on practice building web projects. I have also explored 2D game development with Unity through personal projects. I am consistent, disciplined, and enjoy finding ways to contribute to every team.',
     servicesTitle: 'What I can bring', services: ['Web development', 'Technology solutions', 'IT support', 'Software maintenance', 'AI implementations', 'Automation'], technologiesTitle: 'Technologies', updatesTitle: 'Latest updates', updatesIntro: 'A look at the latest projects and progress.', updates: [
-      { status: 'Incident tracking', title: 'Incidents from the admin console', description: 'The admin console can now log operational incidents (damage, shortage, defective or other) with quantity, value and stock adjustment, and review the total losses for the shift.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
-      { status: 'Direct sales', title: 'Direct bar sales', description: 'Bar staff can now record sales directly from their view, without going through a floor order. The sale is tagged to the bar channel and updates inventory when dispatched.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
-      { status: 'New identity', title: 'Kuantika POS', description: 'The project formerly known as Barflow has a new identity and new tools to manage a venue’s day-to-day operations.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
-      { status: 'New features', title: 'Orders, inventory and sales', description: 'Floor staff can send orders to the bar; when fulfilled, inventory is updated and the sale is recorded. Performance can also be reviewed across different time periods.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
       { status: 'Synced data', title: 'Roles and cloud operations', description: 'Admins, floor staff and bar staff have access tailored to their roles. Data is stored in Supabase and synced across devices; shifts can also be closed and exported as a PDF.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
       { status: 'Role preview', title: 'Sandbox mode in the root console', description: 'The root console can spin up an ephemeral test environment with a "View as" selector to simulate admin, floor and bar roles, previewing each view without touching real data.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
       { status: 'Mobile improvements', title: 'Root console readable on phones', description: 'Styles were reorganized around design tokens and the root console views were adjusted so tables, forms and controls stay readable on small screens.', link: 'View repository', href: 'https://github.com/GermanRhenals/pos-systems' },
     ], projectsTitle: 'Featured project',
     projectDescription: 'Portfolio and service catalog for El Rincón Caribeño, the largest covered leisure venue in the region.', viewProject: 'View project', inConstruction: 'Project in operation',
-    inConstructionEyebrow: 'First clients', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'A POS system for venues that brings together inventory, floor-to-bar orders, sales tracking, team management, and operational reports.',
-    inConstructionStatus: 'In operation', inConstructionGoal: 'Goal', inConstructionGoalValue: 'Sales and inventory', inConstructionRepository: 'View repository', inConstructionNote: 'Open-source project in operation with real clients.',
+    inConstructionEyebrow: 'First clients', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'A POS system for venues —formerly known as Barflow— that brings together inventory, floor-to-bar orders, sales tracking, team management, and operational reports.',
+    inConstructionStatus: 'In operation', inConstructionGoal: 'Goal', inConstructionGoalValue: 'Sales and inventory', inConstructionCapabilitiesTitle: 'What the app does', inConstructionCapabilities: [
+      { title: 'Floor-to-bar orders', description: 'Floor staff send orders to the bar and bar staff fulfill them from their own view.' },
+      { title: 'Inventory and stock', description: 'Inventory is automatically deducted when each order is fulfilled and each sale is recorded.' },
+      { title: 'Incidents and losses', description: 'Log damage, shortage or defective items with stock adjustment and the total losses for the shift.' },
+      { title: 'Direct bar sales', description: 'The bar records direct sales without going through a floor order, updating inventory when dispatched.' },
+    ], inConstructionRepository: 'View repository', inConstructionNote: 'Open-source project in operation with real clients.',
     contactTitle: "Let's build something", contactText: 'I am open to job opportunities, freelance projects, and challenges that help me keep growing.', cv: 'Download CV', copy: 'Copy email',
   },
 } as const
@@ -484,6 +486,16 @@ export default function App() {
                       <p className="mb-1 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.inConstructionStatus}</p>
                       <p className="text-sm sm:text-base">{text.inConstructionNote}</p>
                     </div>
+                  </div>
+
+                  <p className="mb-3 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.inConstructionCapabilitiesTitle}</p>
+                  <div className="mb-7 grid gap-3 sm:grid-cols-2">
+                    {text.inConstructionCapabilities.map((capability) => (
+                      <div key={capability.title} className="border border-black/15 px-4 py-4 dark:border-white/10">
+                        <p className="mb-1 text-sm font-medium sm:text-base">{capability.title}</p>
+                        <p className="text-sm leading-relaxed text-black/70 dark:text-white/70">{capability.description}</p>
+                      </div>
+                    ))}
                   </div>
 
                   <a href="https://github.com/GermanRhenals/pos-systems" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border-b border-black pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 dark:border-white sm:text-sm">
