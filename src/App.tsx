@@ -26,13 +26,12 @@ const content = {
       { status: 'Citas y turnos', title: 'Agenda sin complicaciones', description: 'Los clientes reservan su turno y la barbería organiza la agenda, el flujo de trabajo y la atención en un solo lugar, reduciendo esperas y mejorando la experiencia de cada persona que llega.', link: 'Próximamente', href: '#' },
     ], projectsTitle: 'Proyecto destacado',
     projectDescription: 'Portafolio y catálogo de servicios para El Rincón Caribeño, el estadero cubierto más grande de la región.', viewProject: 'Ver proyecto', inConstruction: 'Proyecto en operación',
-    inConstructionEyebrow: 'Primeros clientes', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'Sistema POS para establecimientos —antes conocido como Barflow— que integra inventario, pedidos de sala al bar, registro de ventas, gestión de equipo e informes de operación.',
+    inConstructionEyebrow: 'Primeros clientes', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'Punto de venta para bares y establecimientos que conecta sala, barra e inventario en tiempo real: del pedido al pago y al cierre de turno.',
     inConstructionStatus: 'En operación', inConstructionGoal: 'Objetivo', inConstructionGoalValue: 'Ventas e inventarios', inConstructionCapabilitiesTitle: 'Lo que hace la aplicación', inConstructionCapabilities: [
-      { title: 'Pedidos de sala al bar', description: 'El equipo de sala envía pedidos al bar y el personal del bar los despacha desde su vista.' },
-      { title: 'Inventario y existencias', description: 'El inventario se descuenta automáticamente al despachar cada pedido y al registrar cada venta.' },
-      { title: 'Incidentes y pérdidas', description: 'Registro de daño, faltante o defectuoso con ajuste de inventario y total de pérdidas del turno.' },
-      { title: 'Venta directa en barra', description: 'El bar registra ventas directas sin pasar por un pedido de sala, actualizando el inventario al despacharse.' },
-    ], inConstructionRepository: 'Ver repositorio', inConstructionNote: 'Proyecto open source en operación con clientes reales.',
+      { title: 'Pedidos de sala al bar', description: 'El mesero envía el pedido desde la mesa y el bar lo despacha con su stock, su pago y su estado actualizados al instante.' },
+      { title: 'Inventario y ventas', description: 'Cada despacho y cada venta en barra descuenta existencias; los incidentes y pérdidas ajustan el inventario y suman al total del turno.' },
+      { title: 'Turnos, equipo e informes', description: 'Roles de administrador, mesero y bar, cierre de turno y un resumen de ventas, pedidos pendientes y stock bajo en una sola vista.' },
+    ], inConstructionRepository: 'Ver repositorio', inConstructionLive: 'Ver la web', inConstructionNote: 'Proyecto open source en operación con clientes reales.',
     contactTitle: 'Construyamos algo', contactText: 'Estoy abierto a oportunidades laborales, proyectos freelance y retos que me permitan seguir creciendo.', cv: 'Descargar CV', copy: 'Copiar correo',
   },
   en: {
@@ -45,13 +44,12 @@ const content = {
       { status: 'Appointments', title: 'Booking made simple', description: 'Clients book their slot and the barbershop organizes its schedule, workflow and service in one place, cutting down wait times and improving the experience of everyone who walks in.', link: 'Coming soon', href: '#' },
     ], projectsTitle: 'Featured project',
     projectDescription: 'Portfolio and service catalog for El Rincón Caribeño, the largest covered leisure venue in the region.', viewProject: 'View project', inConstruction: 'Project in operation',
-    inConstructionEyebrow: 'First clients', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'A POS system for venues —formerly known as Barflow— that brings together inventory, floor-to-bar orders, sales tracking, team management, and operational reports.',
+    inConstructionEyebrow: 'First clients', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'A point of sale for bars and venues that connects floor, bar, and inventory in real time: from order to payment to shift close.',
     inConstructionStatus: 'In operation', inConstructionGoal: 'Goal', inConstructionGoalValue: 'Sales and inventory', inConstructionCapabilitiesTitle: 'What the app does', inConstructionCapabilities: [
-      { title: 'Floor-to-bar orders', description: 'Floor staff send orders to the bar and bar staff fulfill them from their own view.' },
-      { title: 'Inventory and stock', description: 'Inventory is automatically deducted when each order is fulfilled and each sale is recorded.' },
-      { title: 'Incidents and losses', description: 'Log damage, shortage or defective items with stock adjustment and the total losses for the shift.' },
-      { title: 'Direct bar sales', description: 'The bar records direct sales without going through a floor order, updating inventory when dispatched.' },
-    ], inConstructionRepository: 'View repository', inConstructionNote: 'Open-source project in operation with real clients.',
+      { title: 'Floor-to-bar orders', description: 'Waiters send the order from the table and the bar fulfills it with stock, payment, and status updated instantly.' },
+      { title: 'Inventory and sales', description: 'Every dispatch and every direct sale deducts stock; incidents and losses adjust inventory and add to the shift total.' },
+      { title: 'Shifts, team, and reports', description: 'Admin, waiter, and bar roles, shift close, and a single summary of sales, pending orders, and low stock.' },
+    ], inConstructionRepository: 'View repository', inConstructionLive: 'View live site', inConstructionNote: 'Open-source project in operation with real clients.',
     contactTitle: "Let's build something", contactText: 'I am open to job opportunities, freelance projects, and challenges that help me keep growing.', cv: 'Download CV', copy: 'Copy email',
   },
 } as const
@@ -487,7 +485,7 @@ export default function App() {
                   </div>
 
                   <p className="mb-3 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.inConstructionCapabilitiesTitle}</p>
-                  <div className="mb-7 grid gap-3 sm:grid-cols-2">
+                  <div className="mb-7 grid gap-3 md:grid-cols-3">
                     {text.inConstructionCapabilities.map((capability) => (
                       <div key={capability.title} className="border border-black/15 px-4 py-4 dark:border-white/10">
                         <p className="mb-1 text-sm font-medium sm:text-base">{capability.title}</p>
@@ -496,9 +494,14 @@ export default function App() {
                     ))}
                   </div>
 
-                  <a href="https://github.com/GermanRhenals/pos-systems" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border-b border-black pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 dark:border-white sm:text-sm">
-                    {text.inConstructionRepository} ↗
-                  </a>
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <a href="https://germanrhenals.github.io/pos-systems/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border-b border-black pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 dark:border-white sm:text-sm">
+                      {text.inConstructionLive} ↗
+                    </a>
+                    <a href="https://github.com/GermanRhenals/pos-systems" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border-b border-black/30 pb-1 text-xs font-medium uppercase tracking-wide text-black/60 transition-opacity hover:opacity-60 dark:border-white/30 dark:text-white/60 sm:text-sm">
+                      {text.inConstructionRepository} ↗
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
