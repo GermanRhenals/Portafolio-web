@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { castVote, fetchVoteCounts } from './game-vote'
+import type { GameNameOption, VoteCounts } from './game-vote'
 
 // ========================================
 // TIPOS Y CONFIGURACIÓN
@@ -21,9 +23,8 @@ const content = {
     intro: 'Desarrollo soluciones digitales con disciplina, curiosidad y ganas de afrontar nuevos retos.',
     availability: 'Disponible para oportunidades remotas o en otra ciudad.', aboutTitle: 'Sobre mí',
     about: 'Soy German Rhenals, desarrollador de software con dos años de formación y práctica construyendo proyectos web. También he explorado el desarrollo de videojuegos 2D con Unity a través de proyectos personales. Soy constante, disciplinado y disfruto encontrar la manera de sumar en cada equipo.',
-    servicesTitle: 'Lo que puedo aportar', services: ['Desarrollo web', 'Soluciones tecnológicas', 'Soporte TI', 'Mantenimiento de software', 'Implementaciones con IA', 'Automatización'], technologiesTitle: 'Tecnologías', updatesTitle: 'Novedades', updatesIntro: 'Estoy trabajando en un nuevo proyecto para llevar la operación de las barberías a otro nivel.', updates: [
-      { status: 'Nuevo proyecto', title: 'En Silla', description: 'Web para barberías que ayuda a controlar la operación del día a día, agendar citas y turnos, y anticipar las preferencias de cada cliente con grandes ideas para su próximo corte, para que cada visita se sienta única.', link: 'Próximamente', href: '#' },
-      { status: 'Citas y turnos', title: 'Agenda sin complicaciones', description: 'Los clientes reservan su turno y la barbería organiza la agenda, el flujo de trabajo y la atención en un solo lugar, reduciendo esperas y mejorando la experiencia de cada persona que llega.', link: 'Próximamente', href: '#' },
+    servicesTitle: 'Lo que puedo aportar', services: ['Desarrollo web', 'Soluciones tecnológicas', 'Soporte TI', 'Mantenimiento de software', 'Implementaciones con IA', 'Automatización'], technologiesTitle: 'Tecnologías', updatesTitle: 'Novedades', updatesIntro: 'Arranca el desarrollo de nuestro primer videojuego.', updates: [
+      { status: 'Nuevo proyecto', title: 'Nuestro primer videojuego', description: 'Un shooter narrativo desde la perspectiva de un soldado que narra las operaciones de las Fuerzas Militares de Colombia contra las guerrillas en el territorio nacional. La historia se divide en tres actos, cada uno con al menos tres submisiones, hasta completar quince operaciones. Cada misión está pensada para durar al menos quince minutos, entre balas, ríos, jungla y selva colombiana, con cinemáticas cuidadas y desarrollo de personajes.', link: 'Votar por el nombre', href: '#game-vote' },
     ], projectsTitle: 'Proyecto destacado',
     projectDescription: 'Portafolio y catálogo de servicios para El Rincón Caribeño, el estadero cubierto más grande de la región.', viewProject: 'Ver proyecto', inConstruction: 'Proyecto en operación',
     inConstructionEyebrow: 'Primeros clientes', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'Punto de venta para bares y establecimientos que conecta sala, barra e inventario en tiempo real: del pedido al pago y al cierre de turno.',
@@ -32,6 +33,27 @@ const content = {
       { title: 'Inventario y ventas', description: 'Cada despacho y cada venta en barra descuenta existencias; los incidentes y pérdidas ajustan el inventario y suman al total del turno.' },
       { title: 'Turnos, equipo e informes', description: 'Roles de administrador, mesero y bar, cierre de turno y un resumen de ventas, pedidos pendientes y stock bajo en una sola vista.' },
     ], inConstructionRepository: 'Ver repositorio', inConstructionLive: 'Ver la web', inConstructionNote: 'Proyecto open source en operación con clientes reales.',
+    enSilla: 'En Silla en operación', enSillaEyebrow: 'Ahora en operación', enSillaTitle: 'En Silla',
+    enSillaDescription: 'Marketplace de reservas para barberías de barrio: el cliente busca su barbería, elige servicio, barbero y horario, y confirma en minutos. Cada barbería administra su agenda, sus clientes y su equipo desde un panel privado, con los datos aislados de las demás.',
+    enSillaStatus: 'En operación', enSillaGoal: 'Objetivo', enSillaGoalValue: 'Reservas, agenda y clientes', enSillaNote: 'Marketplace público con alta autoservicio y despliegue estático.',
+    enSillaCapabilitiesTitle: 'Lo que hace la aplicación', enSillaCapabilities: [
+      { title: 'Reservas online', description: 'Búsqueda por barbería, selección de servicio, barbero y horario, y confirmación con un enlace único que funciona como credencial.' },
+      { title: 'Agenda y fichas de clientes', description: 'Panel privado con agenda diaria, historial de citas, ideas de corte y estadísticas para que la operación no dependa de una sola persona.' },
+      { title: 'Multi-barbería con roles', description: 'Aislamiento por barbería con RLS en Postgres; el administrador controla todo y cada barbero ve solo su agenda y sus métricas.' },
+    ], enSillaUpdatesTitle: 'Nuevas actualizaciones', enSillaUpdates: [
+      { title: 'Marketplace multi-barbería', description: 'El esquema pasó de una barbería única a varias, conservando los datos existentes y aislados por RLS.' },
+      { title: 'Alta autoservicio', description: 'El dueño crea su barbería, confirma el correo y publica cuando tiene servicio, horario y equipo.' },
+      { title: 'Confirmación y recordatorios', description: 'Enlace único de confirmación, descarga de calendario (.ics), contacto por WhatsApp y recordatorio por correo.' },
+    ], enSillaApiTitle: 'API de envío de mensajes', enSillaApiDescription: 'En Silla consume una API de envío de mensajes desde Supabase Edge Functions: las claves de Brevo o Resend viven como secretos en el servidor y nunca llegan al navegador. A nivel informativo, el envío es transaccional —confirmación del alta de una barbería y recordatorios de turno—, no una herramienta de campañas masivas.',
+    enSillaRepository: 'Ver repositorio', enSillaLive: 'Ver la web',
+    gameVoteEyebrow: 'Votación abierta', gameVoteTitle: 'Ponle nombre al juego', gameVoteIntro: 'Todavía no tiene nombre. Estas son las cuatro opciones finales: el nombre que reciba más votos será el aceptado.', gameVoteNote: 'Un voto por persona cada 10 minutos. Los resultados se actualizan al instante.', gameVoteButton: 'Votar', gameVoteVoting: 'Votando…', gameVoteVoted: 'Votado', gameVoteLeader: 'Más votado', gameVoteTotal: 'votos', gameVoteLoading: 'Cargando votos…',
+    gameVoteOk: '¡Gracias! Tu voto quedó registrado.', gameVoteAlready: 'Ya hay un voto registrado desde este dispositivo. Podrás votar de nuevo en unos minutos.', gameVoteError: 'No pudimos registrar el voto. Inténtalo de nuevo en un momento.', gameVoteUnavailable: 'No pudimos cargar los votos en este momento. Aun así puedes intentar votar.',
+    gameNameOptions: [
+      { key: 'shadows-of-duty', title: 'Sombras del Deber', subtitle: 'Shadows of Duty' },
+      { key: 'green-crossfire', title: 'Fuego Verde', subtitle: 'Green Crossfire' },
+      { key: 'ghost-protocol', title: 'Protocolo Fantasma', subtitle: 'Ghost Protocol' },
+      { key: 'memory-of-shadows', title: 'Memoria de Sombras', subtitle: 'Memory of Shadows' },
+    ],
     contactTitle: 'Construyamos algo', contactText: 'Estoy abierto a oportunidades laborales, proyectos freelance y retos que me permitan seguir creciendo.', cv: 'Descargar CV', copy: 'Copiar correo',
   },
   en: {
@@ -39,9 +61,8 @@ const content = {
     intro: 'I build digital solutions with discipline, curiosity, and the drive to take on new challenges.',
     availability: 'Available for remote opportunities or relocation.', aboutTitle: 'About me',
     about: 'I am German Rhenals, a software developer with two years of training and hands-on practice building web projects. I have also explored 2D game development with Unity through personal projects. I am consistent, disciplined, and enjoy finding ways to contribute to every team.',
-    servicesTitle: 'What I can bring', services: ['Web development', 'Technology solutions', 'IT support', 'Software maintenance', 'AI implementations', 'Automation'], technologiesTitle: 'Technologies', updatesTitle: 'Latest updates', updatesIntro: "I'm working on a new project to take barbershop operations to the next level.", updates: [
-      { status: 'New project', title: 'En Silla', description: 'A website for barbershops that helps manage day-to-day operations, book appointments and shifts, and anticipate each client’s preferences with great ideas for their next cut, so every visit feels unique.', link: 'Coming soon', href: '#' },
-      { status: 'Appointments', title: 'Booking made simple', description: 'Clients book their slot and the barbershop organizes its schedule, workflow and service in one place, cutting down wait times and improving the experience of everyone who walks in.', link: 'Coming soon', href: '#' },
+    servicesTitle: 'What I can bring', services: ['Web development', 'Technology solutions', 'IT support', 'Software maintenance', 'AI implementations', 'Automation'], technologiesTitle: 'Technologies', updatesTitle: 'Latest updates', updatesIntro: 'Development has started on our first video game.', updates: [
+      { status: 'New project', title: 'Our first video game', description: 'A narrative shooter from the perspective of a soldier who recounts the operations of the Colombian Military Forces against guerrilla groups across the national territory. The story is split into three acts, each with at least three sub-missions, for a total of fifteen operations. Every mission is designed to last at least fifteen minutes, amid bullets, rivers, jungle, and the Colombian rainforest, with polished cinematics and character development.', link: 'Vote on the name', href: '#game-vote' },
     ], projectsTitle: 'Featured project',
     projectDescription: 'Portfolio and service catalog for El Rincón Caribeño, the largest covered leisure venue in the region.', viewProject: 'View project', inConstruction: 'Project in operation',
     inConstructionEyebrow: 'First clients', inConstructionTitle: 'Kuantika POS', inConstructionDescription: 'A point of sale for bars and venues that connects floor, bar, and inventory in real time: from order to payment to shift close.',
@@ -50,6 +71,27 @@ const content = {
       { title: 'Inventory and sales', description: 'Every dispatch and every direct sale deducts stock; incidents and losses adjust inventory and add to the shift total.' },
       { title: 'Shifts, team, and reports', description: 'Admin, waiter, and bar roles, shift close, and a single summary of sales, pending orders, and low stock.' },
     ], inConstructionRepository: 'View repository', inConstructionLive: 'View live site', inConstructionNote: 'Open-source project in operation with real clients.',
+    enSilla: 'En Silla in operation', enSillaEyebrow: 'Now in operation', enSillaTitle: 'En Silla',
+    enSillaDescription: 'A booking marketplace for neighborhood barbershops: clients find their shop, choose a service, barber, and time, and confirm in minutes. Each shop manages its schedule, clients, and team from a private panel, with its data isolated from the rest.',
+    enSillaStatus: 'In operation', enSillaGoal: 'Goal', enSillaGoalValue: 'Bookings, schedule, and clients', enSillaNote: 'Public marketplace with self-service signup and static deployment.',
+    enSillaCapabilitiesTitle: 'What the app does', enSillaCapabilities: [
+      { title: 'Online bookings', description: 'Search by barbershop, choose a service, barber, and time, and confirm with a unique link that works as a credential.' },
+      { title: 'Schedule and client profiles', description: 'Private panel with the daily schedule, appointment history, haircut ideas, and stats so operations do not depend on a single person.' },
+      { title: 'Multi-shop with roles', description: 'Per-shop isolation through Postgres RLS; the admin controls everything and each barber only sees their own schedule and metrics.' },
+    ], enSillaUpdatesTitle: 'New updates', enSillaUpdates: [
+      { title: 'Multi-shop marketplace', description: 'The schema moved from a single barbershop to many, preserving existing data and isolating it through RLS.' },
+      { title: 'Self-service signup', description: 'Owners create their shop, confirm their email, and publish once they have a service, schedule, and team.' },
+      { title: 'Confirmation and reminders', description: 'Unique confirmation link, calendar download (.ics), WhatsApp contact, and email reminders.' },
+    ], enSillaApiTitle: 'Messaging API', enSillaApiDescription: 'En Silla consumes a messaging API from Supabase Edge Functions: the Brevo or Resend keys live as server-side secrets and never reach the browser. For information purposes, sending is transactional —barbershop signup confirmation and appointment reminders—, not a mass-campaign tool.',
+    enSillaRepository: 'View repository', enSillaLive: 'View live site',
+    gameVoteEyebrow: 'Voting open', gameVoteTitle: 'Name the game', gameVoteIntro: 'It does not have a name yet. These are the four final options: the name with the most votes will be the one accepted.', gameVoteNote: 'One vote per person every 10 minutes. Results update instantly.', gameVoteButton: 'Vote', gameVoteVoting: 'Voting…', gameVoteVoted: 'Voted', gameVoteLeader: 'Leading', gameVoteTotal: 'votes', gameVoteLoading: 'Loading votes…',
+    gameVoteOk: 'Thanks! Your vote has been recorded.', gameVoteAlready: 'A vote from this device is already registered. You can vote again in a few minutes.', gameVoteError: 'We could not record your vote. Please try again in a moment.', gameVoteUnavailable: 'We could not load the votes right now. You can still try to vote.',
+    gameNameOptions: [
+      { key: 'shadows-of-duty', title: 'Shadows of Duty', subtitle: 'Sombras del Deber' },
+      { key: 'green-crossfire', title: 'Green Crossfire', subtitle: 'Fuego Verde' },
+      { key: 'ghost-protocol', title: 'Ghost Protocol', subtitle: 'Protocolo Fantasma' },
+      { key: 'memory-of-shadows', title: 'Memory of Shadows', subtitle: 'Memoria de Sombras' },
+    ],
     contactTitle: "Let's build something", contactText: 'I am open to job opportunities, freelance projects, and challenges that help me keep growing.', cv: 'Download CV', copy: 'Copy email',
   },
 } as const
@@ -62,6 +104,45 @@ const content = {
  * OPTIMIZADO: 40 frames seleccionados para equilibrar fluidez y performance
  */
 const AVAILABLE_FRAMES = [1, 4, 5, 6, 7, 8, 9, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 41, 43, 45, 47, 49, 50, 51] as const
+
+// ========================================
+// VOTACIÓN DEL VIDEOJUEGO
+// ========================================
+
+/** Marca local para no repetir el voto mientras dure el enfriamiento del backend. */
+const VOTE_STORAGE_KEY = 'gameNameVote'
+const VOTE_COOLDOWN_MS = 10 * 60 * 1000
+
+type VoteFeedback = 'idle' | 'ok' | 'already' | 'error'
+
+/** Lee la marca local del voto; si ya expiró, la descarta. */
+function readStoredVote(): { hasVoted: boolean; feedback: VoteFeedback; option: GameNameOption | null } {
+  try {
+    const stored = localStorage.getItem(VOTE_STORAGE_KEY)
+    if (!stored) return { hasVoted: false, feedback: 'idle', option: null }
+
+    const parsed = JSON.parse(stored) as { at?: number; option?: GameNameOption }
+    if (typeof parsed.at === 'number' && Date.now() - parsed.at < VOTE_COOLDOWN_MS) {
+      return { hasVoted: true, feedback: 'already', option: parsed.option ?? null }
+    }
+
+    localStorage.removeItem(VOTE_STORAGE_KEY)
+  } catch {
+    // Si localStorage no está disponible, seguimos sin marca local.
+  }
+
+  return { hasVoted: false, feedback: 'idle', option: null }
+}
+
+/** Guarda la marca local del voto con la hora en que se emitió. */
+function storeVote(option: GameNameOption) {
+  try {
+    localStorage.setItem(VOTE_STORAGE_KEY, JSON.stringify({ option, at: Date.now() }))
+  } catch {
+    // Sin localStorage el voto igual quedó registrado en Supabase.
+  }
+}
+
 
 /**
  * COMPONENTE PRINCIPAL: App
@@ -98,6 +179,16 @@ export default function App() {
     if (saved !== null) return saved === 'true'
     return false
   })
+
+  // Votación del nombre del videojuego
+  const [storedVote] = useState(readStoredVote)
+  const [voteCounts, setVoteCounts] = useState<VoteCounts | null>(null)
+  const [voteLoading, setVoteLoading] = useState(true)
+  const [voteLoadFailed, setVoteLoadFailed] = useState(false)
+  const [votingFor, setVotingFor] = useState<GameNameOption | null>(null)
+  const [hasVoted, setHasVoted] = useState(storedVote.hasVoted)
+  const [votedOption, setVotedOption] = useState<GameNameOption | null>(storedVote.option)
+  const [voteFeedback, setVoteFeedback] = useState<VoteFeedback>(storedVote.feedback)
 
   // ========================================
   // REFERENCIAS (useRef)
@@ -177,6 +268,30 @@ export default function App() {
   }, [isDarkMode])
 
   /**
+   * CARGA INICIAL DE LA VOTACIÓN
+   * Trae los conteos desde Supabase. La marca local del voto se resuelve en el
+   * estado inicial para no encadenar renders desde el efecto.
+   */
+  useEffect(() => {
+    let cancelled = false
+
+    fetchVoteCounts()
+      .then((counts) => {
+        if (!cancelled) setVoteCounts(counts)
+      })
+      .catch(() => {
+        if (!cancelled) setVoteLoadFailed(true)
+      })
+      .finally(() => {
+        if (!cancelled) setVoteLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  /**
    * EFECTO DE INICIALIZACIÓN
    * Se ejecuta UNA SOLA VEZ al montar el componente
    * RESPONSABILIDADES:
@@ -232,6 +347,56 @@ export default function App() {
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode)
   }
+
+  /**
+   * Registra un voto por uno de los nombres del videojuego.
+   * El backend aplica el enfriamiento por IP; acá solo se evita el doble clic
+   * y se guarda una marca local para que la interfaz refleje el estado.
+   */
+  const handleVote = async (option: GameNameOption) => {
+    if (hasVoted || votingFor !== null) return
+
+    setVotingFor(option)
+    setVoteFeedback('idle')
+
+    const result = await castVote(option)
+    setVotingFor(null)
+
+    if (result.ok) {
+      setVoteCounts(result.counts)
+      setVoteLoadFailed(false)
+      setHasVoted(true)
+      setVotedOption(option)
+      setVoteFeedback('ok')
+      storeVote(option)
+      return
+    }
+
+    if (result.reason === 'already') {
+      setHasVoted(true)
+      setVoteFeedback('already')
+      return
+    }
+
+    setVoteFeedback('error')
+  }
+
+  // Entradas de la votación con sus conteos y el líder actual (si no hay empate)
+  const gameNameEntries = text.gameNameOptions.map((option) => ({
+    ...option,
+    votes: voteCounts?.[option.key] ?? 0,
+  }))
+  const totalVotes = gameNameEntries.reduce((sum, option) => sum + option.votes, 0)
+  const topVotes = gameNameEntries.reduce((max, option) => Math.max(max, option.votes), 0)
+  const leaders = gameNameEntries.filter((option) => option.votes === topVotes && topVotes > 0)
+  const hasUniqueLeader = leaders.length === 1
+
+  const voteFeedbackMessage = {
+    ok: text.gameVoteOk,
+    already: text.gameVoteAlready,
+    error: text.gameVoteError,
+    idle: '',
+  }[voteFeedback]
 
   // ========================================
   // RENDERIZADO JSX
@@ -413,16 +578,101 @@ export default function App() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">04 / {text.updatesTitle}</p>
               <div>
                 <p className="mb-8 max-w-2xl text-base leading-relaxed text-black/65 dark:text-white/65 sm:text-lg">{text.updatesIntro}</p>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {text.updates.map((update) => (
-                    <article key={update.title} className="flex flex-col border border-black/20 bg-white/45 p-5 dark:border-white/10 dark:bg-white/[0.03] sm:p-6">
-                      <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-black/50 dark:text-white/50">{update.status}</p>
-                      <h2 className="mb-3 text-xl font-medium sm:text-2xl">{update.title}</h2>
-                      <p className="mb-6 flex-1 text-sm leading-relaxed text-black/70 dark:text-white/70 sm:text-base">{update.description}</p>
-                      <a href={update.href} target="_blank" rel="noreferrer" className="w-fit border-b border-black pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 dark:border-white sm:text-sm">{update.link} ↗</a>
-                    </article>
-                  ))}
+                <div className={`grid gap-4 ${text.updates.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+                  {text.updates.map((update) => {
+                    const isInternalLink = update.href.startsWith('#')
+                    return (
+                      <article key={update.title} className="flex flex-col border border-black/20 bg-white/45 p-5 dark:border-white/10 dark:bg-white/[0.03] sm:p-6">
+                        <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-black/50 dark:text-white/50">{update.status}</p>
+                        <h2 className="mb-3 text-xl font-medium sm:text-2xl">{update.title}</h2>
+                        <p className="mb-6 flex-1 text-sm leading-relaxed text-black/70 dark:text-white/70 sm:text-base">{update.description}</p>
+                        <a href={update.href} target={isInternalLink ? undefined : '_blank'} rel={isInternalLink ? undefined : 'noreferrer'} className="w-fit border-b border-black pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 dark:border-white sm:text-sm">{update.link} {isInternalLink ? '↓' : '↗'}</a>
+                      </article>
+                    )
+                  })}
                 </div>
+
+                {/* Votación del nombre del videojuego */}
+                <div id="game-vote" className="mt-10 scroll-mt-24 border border-black/20 bg-white/55 p-5 dark:border-white/10 dark:bg-white/[0.04] sm:p-7">
+                  <div className="mb-6 flex flex-wrap items-start justify-between gap-4 border-b border-black/15 pb-5 dark:border-white/10">
+                    <div>
+                      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-black/50 dark:text-white/50">{text.gameVoteEyebrow}</p>
+                      <h3 className="mb-2 text-xl font-medium sm:text-2xl">{text.gameVoteTitle}</h3>
+                      <p className="max-w-2xl text-sm leading-relaxed text-black/65 dark:text-white/65 sm:text-base">{text.gameVoteIntro}</p>
+                    </div>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-black/20 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] dark:border-white/20 sm:text-xs">
+                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                      {voteLoading ? text.gameVoteLoading : voteLoadFailed ? '—' : `${totalVotes} ${text.gameVoteTotal}`}
+                    </span>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {gameNameEntries.map((option) => {
+                      const percentage = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0
+                      const isLeader = hasUniqueLeader && option.key === leaders[0].key
+                      const isVoted = option.key === votedOption
+                      const isVoting = votingFor === option.key
+                      const borderClass = isVoted
+                        ? 'border-emerald-500 dark:border-emerald-400'
+                        : hasVoted
+                          ? 'border-black/15 dark:border-white/10'
+                          : 'border-black/20 hover:border-black/60 dark:border-white/15 dark:hover:border-white/60'
+
+                      return (
+                        <button
+                          key={option.key}
+                          type="button"
+                          onClick={() => handleVote(option.key)}
+                          disabled={hasVoted || votingFor !== null}
+                          className={`group flex w-full flex-col border p-4 text-left transition-colors sm:p-5 ${hasVoted ? 'cursor-default' : ''} ${borderClass}`}
+                        >
+                          <span className="mb-3 flex items-start justify-between gap-3">
+                            <span className="block">
+                              <span className="block text-base font-medium sm:text-lg">{option.title}</span>
+                              <span className="block text-xs text-black/50 dark:text-white/50">{option.subtitle}</span>
+                            </span>
+                            <span className="flex shrink-0 flex-col items-end gap-1">
+                              {isLeader && (
+                                <span className="rounded-full bg-[#15181d] px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-white dark:bg-white dark:text-[#15181d]">{text.gameVoteLeader}</span>
+                              )}
+                              {isVoted && (
+                                <span className="rounded-full border border-emerald-500 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-emerald-700 dark:border-emerald-400 dark:text-emerald-300">{text.gameVoteVoted}</span>
+                              )}
+                            </span>
+                          </span>
+
+                          <span className="mb-2 flex items-baseline justify-between gap-2 text-xs text-black/55 dark:text-white/55">
+                            <span>{voteLoading || voteLoadFailed ? '—' : `${option.votes} ${text.gameVoteTotal}`}</span>
+                            <span>{voteLoading || voteLoadFailed ? '' : `${percentage}%`}</span>
+                          </span>
+
+                          <span className="block h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+                            <span className="block h-full rounded-full bg-[#15181d] transition-all duration-500 dark:bg-white" style={{ width: `${percentage}%` }} />
+                          </span>
+
+                          {!hasVoted && (
+                            <span className="mt-2 block text-[10px] font-semibold uppercase tracking-[0.14em] text-black/45 transition-colors group-hover:text-black dark:text-white/45 dark:group-hover:text-white">
+                              {isVoting ? text.gameVoteVoting : text.gameVoteButton} →
+                            </span>
+                          )}
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  <p className="mt-4 text-xs leading-relaxed text-black/50 dark:text-white/50">{text.gameVoteNote}</p>
+
+                  {voteFeedback !== 'idle' && (
+                    <p className={`mt-3 border-l-2 pl-3 text-xs leading-relaxed sm:text-sm ${voteFeedback === 'error' ? 'border-red-500 text-red-700 dark:text-red-300' : 'border-emerald-500 text-emerald-700 dark:text-emerald-300'}`}>
+                      {voteFeedbackMessage}
+                    </p>
+                  )}
+
+                  {voteLoadFailed && voteFeedback !== 'error' && (
+                    <p className="mt-3 border-l-2 border-amber-500 pl-3 text-xs leading-relaxed text-amber-700 dark:text-amber-300 sm:text-sm">{text.gameVoteUnavailable}</p>
+                  )}
+                </div>
+
               </div>
             </div>
           </section>
@@ -507,12 +757,92 @@ export default function App() {
             </div>
           </section>
 
-          {/* ====== SECCIÓN 06: CONTACTO ====== */}
+          {/* ====== SECCIÓN 07: EN SILLA EN OPERACIÓN ====== */}
+          <section id="ensilla" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 sm:py-20 md:py-28 lg:py-32">
+            <div className="grid gap-6 sm:gap-8 md:grid-cols-[0.7fr_1.3fr] md:gap-12 lg:gap-16">
+              {/* Número y título de sección */}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/50">07 / {text.enSilla}</p>
+                <p className="mt-4 text-xs uppercase tracking-[0.16em] text-black/45 dark:text-white/45">{text.enSillaEyebrow}</p>
+              </div>
+
+              {/* Tarjeta del proyecto en operación */}
+              <div className="group relative overflow-hidden border border-black/20 bg-white/55 p-5 shadow-[0_18px_60px_rgba(0,0,0,0.08)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_80px_rgba(0,0,0,0.14)] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[0_18px_60px_rgba(0,0,0,0.28)] sm:p-7 md:p-9 lg:p-11">
+                <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[#d7f5e4] opacity-60 blur-3xl transition-transform duration-700 group-hover:scale-125 dark:bg-emerald-500/20" aria-hidden="true" />
+                <div className="relative">
+                  <div className="mb-7 flex flex-wrap items-center justify-between gap-4 border-b border-black/15 pb-5 dark:border-white/10">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#15181d] text-sm text-white dark:bg-white dark:text-[#15181d]">E</span>
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.18em] text-black/45 dark:text-white/45">{text.enSillaStatus}</p>
+                        <h2 className="text-2xl font-medium sm:text-3xl md:text-4xl">{text.enSillaTitle}</h2>
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-black/20 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] dark:border-white/20 sm:text-xs">
+                      <span className="h-2 w-2 animate-blink rounded-full bg-emerald-500" />
+                      {text.enSillaStatus}
+                    </span>
+                  </div>
+
+                  <p className="mb-6 max-w-2xl text-base leading-relaxed sm:text-lg md:text-xl">{text.enSillaDescription}</p>
+
+                  <div className="mb-7 grid gap-3 sm:grid-cols-2">
+                    <div className="border border-black/15 px-4 py-4 dark:border-white/10">
+                      <p className="mb-1 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.enSillaGoal}</p>
+                      <p className="text-sm sm:text-base">{text.enSillaGoalValue}</p>
+                    </div>
+                    <div className="border border-black/15 px-4 py-4 dark:border-white/10">
+                      <p className="mb-1 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.enSillaStatus}</p>
+                      <p className="text-sm sm:text-base">{text.enSillaNote}</p>
+                    </div>
+                  </div>
+
+                  <p className="mb-3 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.enSillaCapabilitiesTitle}</p>
+                  <div className="mb-7 grid gap-3 md:grid-cols-3">
+                    {text.enSillaCapabilities.map((capability) => (
+                      <div key={capability.title} className="border border-black/15 px-4 py-4 dark:border-white/10">
+                        <p className="mb-1 text-sm font-medium sm:text-base">{capability.title}</p>
+                        <p className="text-sm leading-relaxed text-black/70 dark:text-white/70">{capability.description}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="mb-3 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.enSillaUpdatesTitle}</p>
+                  <ul className="mb-7 grid gap-3">
+                    {text.enSillaUpdates.map((update) => (
+                      <li key={update.title} className="flex gap-3 border-b border-black/10 pb-3 last:border-0 last:pb-0 dark:border-white/10">
+                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" aria-hidden="true" />
+                        <p className="text-sm leading-relaxed text-black/70 dark:text-white/70">
+                          <span className="font-medium text-black dark:text-white">{update.title}.</span> {update.description}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mb-7 border border-black/15 bg-black/[0.02] px-4 py-4 dark:border-white/10 dark:bg-white/[0.02]">
+                    <p className="mb-1 text-[10px] uppercase tracking-[0.16em] text-black/40 dark:text-white/40">{text.enSillaApiTitle}</p>
+                    <p className="text-sm leading-relaxed text-black/70 dark:text-white/70">{text.enSillaApiDescription}</p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <a href="https://germanrhenals.github.io/ensilla/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border-b border-black pb-1 text-xs font-medium uppercase tracking-wide transition-opacity hover:opacity-60 dark:border-white sm:text-sm">
+                      {text.enSillaLive} ↗
+                    </a>
+                    <a href="https://github.com/GermanRhenals/ensilla" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border-b border-black/30 pb-1 text-xs font-medium uppercase tracking-wide text-black/60 transition-opacity hover:opacity-60 dark:border-white/30 dark:text-white/60 sm:text-sm">
+                      {text.enSillaRepository} ↗
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ====== SECCIÓN 08: CONTACTO ====== */}
           <section id="contact" className="mx-auto max-w-6xl scroll-mt-20 border-t border-black/15 dark:border-white/10 py-16 pb-20 sm:py-20 sm:pb-24 md:py-28 md:pb-32 lg:py-32">
             {/* Fondo oscuro para contrastar con el resto del contenido */}
             <div className="bg-[#15181d] dark:bg-[#0a0e27] px-5 py-8 text-white sm:px-8 sm:py-12 md:px-10 md:py-16 lg:px-12">
               {/* Número y título de sección */}
-              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/50 dark:text-white/40 sm:mb-6">07 / Contact</p>
+              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/50 dark:text-white/40 sm:mb-6">08 / Contact</p>
               
               {/* Título principal */}
               <h2 className="mb-4 text-2xl font-medium sm:mb-5 sm:text-3xl md:text-5xl lg:text-6xl">{text.contactTitle}</h2>
